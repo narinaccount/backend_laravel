@@ -12,7 +12,7 @@ class ImageController extends Controller
     {
         // Validate the request
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
 //        dd($request->file('image'));
@@ -34,17 +34,23 @@ class ImageController extends Controller
 
     public function getImage($name)
     {
-        $path = storage_path('app/images/' . $name);
+        // $path = storage_path('images/' . $name);
 
-        if (!file_exists($path)) {
+        $path = 'images/' . $name;
+
+        // dd($path);
+
+        if(Storage::disk('public')->exists($path)) {
+            return response()->json([
+                'name' => $name,
+                'url' => asset('storage/'. $path),
+                'extension' => pathinfo($path, PATHINFO_EXTENSION),
+            ]);
+        } else {
             return response()->json(['error' => 'Image not found'], 404);
         }
 
-        return response()->json([
-            'name' => $name,
-            'url' => Storage::url('images/' . $name),
-            'extension' => pathinfo($path, PATHINFO_EXTENSION),
-        ]);
+        
     }
 
     public function getAllImages()
@@ -67,12 +73,13 @@ class ImageController extends Controller
     {
         $path = 'images/' . $name;
 
-        if (!Storage::exists($path)) {
-            return response()->json(['error' => 'Image not found'], 404);
+        if (Storage::disk('public')->exists($path)) {
+            // Delete the image
+            Storage::disk('public')->delete($path);
+
+            return response()->json(['success' => 'Image deleted successfully!']);
+        } else {
+            return response()->json(['error' => 'Image not found!'], 404);
         }
-
-        Storage::delete($path);
-
-        return response()->json(['message' => 'Image deleted successfully']);
     }
 }

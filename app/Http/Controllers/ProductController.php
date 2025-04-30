@@ -31,6 +31,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        // dd($request->all());
         return new ProductResource(Product::create($request->all()));
     }
 

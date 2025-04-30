@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -49,3 +50,12 @@ Route::get('/images', [ImageController::class, 'getAllImages']);
 Route::get('/images/{name}', [ImageController::class, 'getImage']);
 Route::post('/images', [ImageController::class, 'upload']);
 Route::delete('/images/{name}', [ImageController::class, 'deleteImage']);
+
+// Route::post('login', [AuthController::class, 'login']);
+
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('me', [AuthController::class, 'me']);
+//     Route::post('logout', [AuthController::class, 'logout']);
+//     Route::post('refresh', [AuthController::class, 'refresh']);
+//     Route::get('products', [ProductController::class, 'index']);
+// });

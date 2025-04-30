@@ -23,6 +23,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'image' => 'required',
+            'image_name' => 'required',
             'name' => 'required|string|max:255',
             'category_id' => 'required|numeric',
             'price' => 'required|numeric',
